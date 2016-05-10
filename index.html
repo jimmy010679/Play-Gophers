@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>打地鼠</title>
+  <script src="jquery-2.1.1.js" ></script>
+  <style>
+    body {
+      text-align: center;
+    }
+    h1 {
+      text-align: center;
+    }
+    #gophers {
+      width: 720px;
+      border: 1px solid #999;
+      margin: 0 auto 25px auto;
+    }
+    #gophers>.box {
+      float: left;
+      width: 80px;
+      height: 80px;
+      background-color: #fff;
+      box-shadow: 0 0 2px #555;
+      cursor: pointer;
+    }
+    #gophers>.clear
+    {      
+      display: block;
+      clear: both;
+    }
+    #gophers>.view {
+      background: yellow url(./s.png) no-repeat;
+    }
+    #gophers>.yes {
+      background-color: blue;
+    }
+    #gophers img {
+      width: 100%;
+    }
+    #gophers>.no {
+      background-color: red;
+    }
+      
+    #gophers::after, #gophers::before{
+      display: table;
+      clear: both;
+      content: "";
+    }
+    
+    #hh {
+      margin: 0 auto 25px 0;
+      padding: 0 15px;
+      width: 250px;
+      height: 50px;
+      line-height: 3.5em;
+      color: #fff;
+      background-color: #ff6fa2;
+      background-image: linear-gradient(transparent, transparent 85%, rgba(0, 0, 0, 0.05) 85%, rgba(0, 0, 0, 0.2));
+      border: 0;
+      cursor: pointer;
+    }
+    #hh:hover {
+      background-color: #a5282e;
+    }
+    #hit {
+      font-size: 24px;
+      letter-spacing: 1px;
+      margin: 0 0 10px 0;
+    }
+    
+    #clock {
+      font-size: 18px;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>打地鼠 簡易版</h1>
+  <div id="gophers">    
+  </div>
+
+  <button id="hh">查看地鼠在哪</button>
+  <div id="hit">點擊次數：0</div>
+  <div id="clock">已經使用時間：0</div>
+  
+  <script>
+
+    var GophersJS = (function() {
+      
+      //點擊次數
+      var hitsum = 0;
+      
+      //成功次數
+      var yessum= 0;
+      
+      //計時
+      var clock = "no";
+      var clocktime = 0;  
+      
+      //產生5組亂數
+      var a = [];
+      var b = [];
+
+      //提示
+      var prompt = 0;
+      
+      function getRandom() {
+        return Math.floor(Math.random()*(81-0));
+      }      
+      for  (var i = 0; i < 5; i++) { 
+        a[i] = getRandom();
+        console.log("a="+a[i]);
+      }
+         
+      
+      
+      function Gophers(i) {        
+        var $div = $("<div>", {class: "box"});
+        $("#gophers").append($div);
+        
+        //換行設定        
+        if ( (i+1) % 9 == 0 ) {
+        var $clear = $("<div>", {class: "clear"});
+        $("#gophers").append($clear);
+        }
+      }
+      
+      //產生9*9表格
+      for ( var i = 0 ; i < 81 ; i++) {
+        Gophers(i);      
+      }
+      
+      //點擊觸發事件
+      $('#gophers .box').click(function(){
+        
+        var col = $('#gophers .box').index($(this));
+
+        var ttt = "no";
+
+        for (var i = 0; i < 5; i++) {
+         
+            //如果是答案
+            if ( col == a[i] ) {
+              ttt = "yes";
+
+              if ( b[i] !== "yes" ) {
+                  b[i] = "yes";
+                  $(this).addClass("yes");
+                  $(this).html("<img src='./d.png' />");        
+                  yessum =  yessum + 1;
+              }
+  
+              if ( yessum > 4 ) {
+                  alert("恭喜過關，已使用時間: "+clocktime+" 秒");
+                  history.go(0);
+              }
+            }         
+        }
+
+        //不是答案
+        if ( ttt !== "yes" ) {
+            $(this).addClass("no");
+            $(this).html("<img src='./no.png' />");
+        }
+        
+        //增加點擊次數
+        hitsum = hitsum + 1;
+        $("#hit").html("點擊次數："+hitsum);  
+      
+        //第一次啟動，計時
+        if ( clock == "no" ) {
+        
+            clock = "yes";
+            setInterval(
+              function() {
+                  clocktime = clocktime +1;
+                  $("#clock").html("已經使用時間：" + clocktime + " 秒");
+              }
+            , 1000);
+        }
+        
+      });
+      
+      
+      //提示顯示 點擊事件
+      $('#hh').click(function(){
+
+        if ( prompt == 0 ){
+            prompt = 1;
+            for (var i = 0; i < $("#gophers .box").length; i++) {        
+              for (var z = 0; z < 5; z++) {
+                  if ( i == a[z]) {
+                    document.getElementsByClassName('box')[i].classList.add("view");
+                  }
+              }
+            }
+        } else {
+            prompt = 0;
+            for (var i = 0; i < $("#gophers .box").length; i++) {        
+              for (var z = 0; z < 5; z++) {
+                  if ( i == a[z]) {
+                    document.getElementsByClassName('box')[i].classList.remove("view");
+                  }
+              }
+            }
+        }
+      });
+
+    })(); 
+    
+  </script>
+</body>    
+</html>
