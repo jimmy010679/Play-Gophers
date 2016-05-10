@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, , maximum-scale=1">
   <title>打地鼠</title>
   <script src="jquery-2.1.1.js" ></script>
   <style>
@@ -12,18 +13,35 @@
       text-align: center;
     }
     #gophers {
-      width: 720px;
+      width: 100%;
       border: 1px solid #999;
       margin: 0 auto 25px auto;
-    }
+    }    
     #gophers>.box {
       float: left;
-      width: 80px;
-      height: 80px;
+      width: 11.11111%;
+      height: 43px;
       background-color: #fff;
       box-shadow: 0 0 2px #555;
       cursor: pointer;
     }
+    @media (min-width: 540px) {
+      #gophers {
+        width: 540px;        
+      }
+      #gophers>.box {
+        height: 59px;
+      }
+    }
+    @media (min-width: 720px) {
+      #gophers {
+        width: 720px;
+      }
+      #gophers>.box {
+        height: 80px;
+      }
+    }
+
     #gophers>.clear
     {      
       display: block;
@@ -31,6 +49,7 @@
     }
     #gophers>.view {
       background: yellow url(./s.png) no-repeat;
+      background-size: 100% 100%;
     }
     #gophers>.yes {
       background-color: blue;
@@ -88,7 +107,7 @@
   <script>
 
     var GophersJS = (function() {
-      
+
       //點擊次數
       var hitsum = 0;
       
