@@ -1,6 +1,6 @@
 # Play-Gophers
 
-Javascript 踩地鼠
+Javascript&Jquery 踩地鼠
 
 上課練習作品
 
